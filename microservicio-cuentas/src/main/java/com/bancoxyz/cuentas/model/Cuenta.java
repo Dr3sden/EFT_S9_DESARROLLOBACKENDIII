@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cuenta {
+
     @Id
     @Column(name = "id_cuenta")
     private Long id;

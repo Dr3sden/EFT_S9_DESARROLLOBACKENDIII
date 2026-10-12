@@ -1,0 +1,7 @@
+com/bancoxyz/clientes/model/Cliente.class
+com/bancoxyz/clientes/dto/ClienteRequest.class
+com/bancoxyz/clientes/config/SecurityConfig.class
+com/bancoxyz/clientes/service/ClienteService.class
+com/bancoxyz/clientes/ClientesApplication.class
+com/bancoxyz/clientes/repository/ClienteRepository.class
+com/bancoxyz/clientes/controller/ClienteController.class

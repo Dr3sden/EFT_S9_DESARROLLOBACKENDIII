@@ -9,8 +9,6 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.time.Duration;
-
 @Slf4j
 @Configuration
 public class RestClientConfig {
@@ -18,13 +16,12 @@ public class RestClientConfig {
     @Bean
     public RestClient restClient() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout((int) Duration.ofSeconds(10).toMillis());
-        factory.setReadTimeout((int) Duration.ofSeconds(30).toMillis());
+        factory.setConnectTimeout(3000);   // 3 segundos para conectar
+        factory.setReadTimeout(5000);      // 5 segundos para leer respuesta
 
         return RestClient.builder()
             .requestFactory(factory)
             .requestInterceptor((request, body, execution) -> {
-                // Propaga el Authorization del request actual
                 ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
                 if (attrs != null) {
                     HttpServletRequest servletRequest = attrs.getRequest();

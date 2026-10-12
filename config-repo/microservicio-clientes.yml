@@ -1,0 +1,4 @@
+# Configuracion especifica del microservicio-clientes
+logging:
+  level:
+    com.bancoxyz.clientes: INFO

@@ -1,0 +1,7 @@
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/ClientesApplication.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/config/SecurityConfig.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/controller/ClienteController.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/dto/ClienteRequest.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/model/Cliente.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/repository/ClienteRepository.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-clientes/src/main/java/com/bancoxyz/clientes/service/ClienteService.java

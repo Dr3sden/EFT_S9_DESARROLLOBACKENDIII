@@ -1,4 +1,23 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: banco_xyz
+      POSTGRES_USER: banco
+      POSTGRES_PASSWORD: banco123
+    ports:
+      - "5433:5432"  # host 5433, contenedor 5432 (evita conflicto con postgres local)
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banco -d banco_xyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - banco-net
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -76,7 +95,7 @@ services:
       - auth-server
     restart: on-failure
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 35.153.202.176:9092
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
     networks:
@@ -93,7 +112,39 @@ services:
       - auth-server
     restart: on-failure
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 35.153.202.176:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
+    networks:
+      - banco-net
+
+  microservicio-pagos:
+    build: ./microservicio-pagos
+    container_name: microservicio-pagos
+    ports:
+      - "8085:8085"
+    depends_on:
+      - kafka
+      - eureka-server
+      - auth-server
+    restart: on-failure
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 35.153.202.176:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
+    networks:
+      - banco-net
+
+  microservicio-clientes:
+    build: ./microservicio-clientes
+    container_name: microservicio-clientes
+    ports:
+      - "8086:8086"
+    depends_on:
+      - eureka-server
+      - auth-server
+    restart: on-failure
+    environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
     networks:
@@ -131,7 +182,48 @@ services:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
     networks:
       - banco-net
+    
+  bff-atm:
+    build: ./bff-atm
+    container_name: bff-atm
+    ports:
+      - "8084:8084"
+    depends_on:
+      - microservicio-cuentas
+      - auth-server
+      - eureka-server
+    restart: on-failure
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth-server:9000
+    networks:
+      - banco-net
 
+  batch-service:
+    build: ./batch-service
+    container_name: batch-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+      eureka-server:
+        condition: service_started
+    restart: on-failure
+    environment:
+      CONFIG_SERVER_URI: http://config-server:8888
+      EUREKA_URI: http://eureka-server:8761/eureka
+      DB_URL: jdbc:postgresql://postgres:5432/banco_xyz
+      DB_USER: banco
+      DB_PASSWORD: banco123
+      DB_DRIVER: org.postgresql.Driver
+    networks:
+      - banco-net
 networks:
   banco-net:
     driver: bridge
+
+volumes:
+  postgres-data:

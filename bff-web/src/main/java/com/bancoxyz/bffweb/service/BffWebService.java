@@ -17,17 +17,22 @@ public class BffWebService {
 
     private final RestClient restClient;
 
-    @CircuitBreaker(name = "webBffCB", fallbackMethod = "fallback")
+    @CircuitBreaker(name = "webBffCB", fallbackMethod = "fallbackTransacciones")
     public List<TransaccionWebDTO> obtenerTransacciones() {
+        log.info("[BFF-WEB] Llamando a microservicio-transacciones...");
         TransaccionWebDTO[] response = restClient.get()
                 .uri("http://microservicio-transacciones:8081/api/transacciones")
                 .retrieve()
                 .body(TransaccionWebDTO[].class);
+        log.info("[BFF-WEB] Respuesta recibida: {} transacciones",
+                response != null ? response.length : 0);
         return response != null ? Arrays.asList(response) : List.of();
     }
 
-    public List<TransaccionWebDTO> fallback(Throwable t) {
-        log.warn("[BFF-WEB CB] Fallback activado: {}", t.getMessage());
+    public List<TransaccionWebDTO> fallbackTransacciones(Throwable t) {
+        log.warn("[BFF-WEB CB] *** FALLBACK ACTIVADO ***");
+        log.warn("[BFF-WEB CB] Excepción: {} - Mensaje: {}",
+                t.getClass().getSimpleName(), t.getMessage());
         return List.of();
     }
 }

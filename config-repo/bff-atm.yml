@@ -1,0 +1,5 @@
+# Configuracion del BFF ATM
+logging:
+  level:
+    com.bancoxyz.bffatm: INFO
+    io.github.resilience4j: INFO

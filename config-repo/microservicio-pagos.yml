@@ -1,0 +1,5 @@
+# Configuracion especifica del microservicio-pagos
+logging:
+  level:
+    com.bancoxyz.pagos: INFO
+    org.springframework.kafka: WARN

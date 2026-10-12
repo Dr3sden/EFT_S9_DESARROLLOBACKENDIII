@@ -1,0 +1,9 @@
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/PagosApplication.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/config/KafkaConfig.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/config/SecurityConfig.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/controller/PagoController.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/dto/PagoRequest.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/model/Pago.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/repository/PagoRepository.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/service/KafkaProducerService.java
+/home/jose/Descargas/banco-xyz-cloud/microservicio-pagos/src/main/java/com/bancoxyz/pagos/service/PagoService.java
